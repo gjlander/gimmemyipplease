@@ -1,19 +1,15 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { DateTime } from "luxon";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+// import { DateTime } from "luxon";
 import "./styles.css";
+import InfoCard from "./components/InfoCard";
 import MyMap from "./components/MyMap";
 
 function App() {
     const [myData, setMyData] = useState();
     const [myCountry, setMyCountry] = useState();
-    const localTime = DateTime.now().toLocaleString(DateTime.DATETIME_MED);
-    const nyTime = DateTime.now()
-        .setZone("America/New_York")
-        .toLocaleString(DateTime.DATETIME_MED);
-    const tokyoTime = DateTime.now()
-        .setZone("Asia/Tokyo")
-        .toLocaleString(DateTime.DATETIME_MED);
 
     useEffect(() => {
         const getData = async () => {
@@ -74,25 +70,29 @@ function App() {
 
     return (
         <>
-            {myData && myCountry && (
-                <>
-                    <h3>My IP address is: {myData.ip}</h3>
-                    <h4>
-                        My physical address is: {myData.location.city},{" "}
-                        {myData.location.region}, {myData.location.country}
-                    </h4>
-                    <h5>
-                        Local Time: {localTime} <br />
-                        New York Time: {nyTime} <br />
-                        Tokyo Time: {tokyoTime}
-                    </h5>
-                    <img alt={myCountry.flags.alt} src={myCountry.flags.png} />
-                    <MyMap
-                        lat={myData.location.lat}
-                        lng={myData.location.lng}
-                    />
-                </>
-            )}
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    p: 5,
+                    maxWidth: 1,
+                }}
+            >
+                <Typography align="center" variant="h1" gutterBottom={true}>
+                    Gimme My IP Please...
+                </Typography>
+                {myData && myCountry && (
+                    <>
+                        <InfoCard {...myData} {...myCountry} />
+
+                        <MyMap
+                            lat={myData.location.lat}
+                            lng={myData.location.lng}
+                        />
+                    </>
+                )}
+            </Box>
         </>
     );
 }
